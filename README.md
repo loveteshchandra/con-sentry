@@ -1,1 +1,1 @@
-# con-sentry
+# holier-than-prompt
