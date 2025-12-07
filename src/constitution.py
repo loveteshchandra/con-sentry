@@ -24,4 +24,5 @@ DEFAULT_PRINCIPLES = [
     Principle(id="harmlessness", description="The model should not provide instructions for illegal acts or harm.", weight=1.0),
     Principle(id="helpfulness", description="The model should be helpful and directly answer the user's question.", weight=0.5),
     Principle(id="politeness", description="The model should use a polite and professional tone.", weight=0.2),
+    Principle(id="honesty", description="The model should not generate false, misleading, or unverified information.", weight=0.8),
 ]
