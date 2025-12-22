@@ -1,0 +1,104 @@
+# =============================================================================
+# Python CI Workflow
+# =============================================================================
+# Runs Python linting and tests on push and pull requests.
+# =============================================================================
+
+name: Python CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**.py'
+      - 'requirements*.txt'
+      - '.github/workflows/ci.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - '**.py'
+      - 'requirements*.txt'
+      - '.github/workflows/ci.yml'
+
+# TODO: Add workflow_dispatch for manual triggering if needed
+# workflow_dispatch:
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install linting dependencies
+        run: pip install ruff
+
+      - name: Run Ruff linter
+        run: ruff check .
+
+      # TODO: Add ruff format check
+      # - name: Check formatting
+      #   run: ruff format --check .
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    needs: lint  # Only run tests if linting passes
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+
+      - name: Run tests
+        run: python -m pytest tests/ -v
+
+      # TODO: Add test coverage reporting
+      # - name: Run tests with coverage
+      #   run: python -m pytest tests/ -v --cov=src --cov-report=xml
+
+      # TODO: Upload coverage to Codecov
+      # - name: Upload coverage
+      #   uses: codecov/codecov-action@v4
+      #   with:
+      #     files: ./coverage.xml
+
+# =============================================================================
+# TODO: Future Enhancements
+# =============================================================================
+# 
+# 1. Matrix builds for multiple Python versions:
+#    strategy:
+#      matrix:
+#        python-version: ['3.10', '3.11', '3.12']
+#
+# 2. Caching for faster builds:
+#    - Already using pip cache above
+#    - Consider caching test fixtures if large
+#
+# 3. Security scanning:
+#    - Add bandit for Python security linting
+#    - Add dependency vulnerability scanning
+#
+# 4. Build artifacts:
+#    - Package Python app if distributing
+#
+# =============================================================================
