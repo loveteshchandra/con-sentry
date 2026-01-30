@@ -1,8 +1,7 @@
 # =============================================================================
 # Terraform Outputs
 # =============================================================================
-# Define outputs for resources created by this configuration.
-# These can be used by other Terraform configurations or CI/CD pipelines.
+# Outputs for resources created by this configuration.
 # =============================================================================
 
 output "aws_account_id" {
@@ -15,20 +14,32 @@ output "environment" {
   value       = var.environment
 }
 
-# TODO: Add outputs for your infrastructure resources
-# Examples:
-#
-# output "vpc_id" {
-#   description = "ID of the VPC"
-#   value       = aws_vpc.main.id
-# }
-#
-# output "api_endpoint" {
-#   description = "API Gateway endpoint URL"
-#   value       = aws_apigatewayv2_api.main.api_endpoint
-# }
-#
-# output "s3_bucket_name" {
-#   description = "Name of the S3 bucket"
-#   value       = aws_s3_bucket.main.id
-# }
+output "vpc_id" {
+  description = "ID of the VPC"
+  value       = aws_vpc.main.id
+}
+
+output "ecr_repository_url" {
+  description = "URL of the ECR repository for pushing images"
+  value       = aws_ecr_repository.app.repository_url
+}
+
+output "ecs_cluster_name" {
+  description = "Name of the ECS cluster"
+  value       = aws_ecs_cluster.main.name
+}
+
+output "ecs_service_name" {
+  description = "Name of the ECS service"
+  value       = aws_ecs_service.app.name
+}
+
+output "cloudwatch_log_group" {
+  description = "CloudWatch log group for ECS tasks"
+  value       = aws_cloudwatch_log_group.ecs.name
+}
+
+output "security_group_id" {
+  description = "Security group ID for ECS tasks"
+  value       = aws_security_group.ecs.id
+}
